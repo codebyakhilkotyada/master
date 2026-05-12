@@ -1,0 +1,275 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 225 25% 5%;
+    --foreground: 220 15% 90%;
+
+    --card: 225 22% 8%;
+    --card-foreground: 220 15% 90%;
+
+    --popover: 225 22% 8%;
+    --popover-foreground: 220 15% 90%;
+
+    --primary: 210 100% 60%;
+    --primary-foreground: 225 25% 5%;
+
+    --secondary: 225 18% 12%;
+    --secondary-foreground: 220 15% 90%;
+
+    --muted: 225 16% 10%;
+    --muted-foreground: 220 12% 50%;
+
+    --accent: 250 55% 62%;
+    --accent-foreground: 220 15% 95%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 225 18% 14%;
+    --input: 225 18% 14%;
+    --ring: 210 100% 60%;
+
+    --radius: 0.75rem;
+
+    --glow-primary: 210 100% 60%;
+    --glow-accent: 250 55% 62%;
+
+    --glass-bg: 225 22% 8% / 0.6;
+    --glass-border: 225 18% 22% / 0.4;
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+
+    --gradient-primary: linear-gradient(135deg, hsl(210, 100%, 60%), hsl(230, 90%, 65%));
+    --gradient-accent: linear-gradient(135deg, hsl(250, 55%, 62%), hsl(210, 100%, 60%));
+    --gradient-hero: radial-gradient(ellipse at 20% 50%, hsl(210 100% 60% / 0.06) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, hsl(250 55% 62% / 0.04) 0%, transparent 50%);
+
+    --sidebar-background: 225 22% 6%;
+    --sidebar-foreground: 220 15% 90%;
+    --sidebar-primary: 210 100% 60%;
+    --sidebar-primary-foreground: 225 25% 5%;
+    --sidebar-accent: 225 18% 12%;
+    --sidebar-accent-foreground: 220 15% 90%;
+    --sidebar-border: 225 18% 14%;
+    --sidebar-ring: 210 100% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* 🌊 Fluid root font scale: 14px @320 → 18px @1920 */
+    font-size: clamp(14px, 0.75rem + 0.45vw, 18px);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  section[id] {
+    scroll-margin-top: 5rem;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    text-wrap: pretty;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+
+  /* Long words / URLs never blow out cards on small screens */
+  h1, h2, h3, h4, h5, h6, p, span, a, li {
+    overflow-wrap: anywhere;
+  }
+
+  /* 📱 MOBILE RESPONSIVE FIX:
+     Prevent any horizontal overflow on real device viewports (iPhone SE 320px,
+     Galaxy S8+ 360px, iPhone 12 Pro 390px, Pixel 412px, etc.).
+     Without this, blurred decorative blobs, particles, or wide content can push
+     the layout sideways, which Chrome only reveals in device-emulation mode. */
+  html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+
+  /* 📱 Ensure media never overflows its container on small screens */
+  img, video, canvas, svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* 📱 Allow flex/grid children to shrink instead of forcing horizontal scroll */
+  #root {
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* 👆 Larger touch targets on coarse pointers (mobile/tablet) */
+  @media (pointer: coarse) {
+    button, a, [role="button"], input, select, textarea {
+      min-height: 40px;
+    }
+  }
+
+  /* 📱 Reduce motion-heavy effects on small screens for smoother scroll */
+  @media (max-width: 767px) {
+    .animate-float { animation: none; }
+    * { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+  }
+
+  /* ♿ Respect user reduced-motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  ::selection {
+    background: hsl(210 100% 60% / 0.3);
+    color: hsl(220 15% 95%);
+  }
+}
+
+@layer components {
+  .glass {
+    background: hsl(var(--glass-bg));
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid hsl(var(--glass-border));
+    box-shadow: var(--glass-shadow);
+  }
+
+  .glass-subtle {
+    background: hsl(225 22% 8% / 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid hsl(225 18% 20% / 0.3);
+  }
+
+  .glow-primary {
+    box-shadow: 0 0 20px hsl(210 100% 60% / 0.15), 0 0 60px hsl(210 100% 60% / 0.05);
+  }
+
+  .glow-border {
+    border: 1px solid hsl(210 100% 60% / 0.25);
+    box-shadow: 0 0 15px hsl(210 100% 60% / 0.08), inset 0 0 15px hsl(210 100% 60% / 0.03);
+  }
+
+  .text-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-accent {
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .btn-primary {
+    @apply relative inline-flex items-center justify-center px-8 py-3 rounded-lg font-semibold text-primary-foreground transition-all duration-300;
+    background: var(--gradient-primary);
+    box-shadow: 0 4px 15px hsl(210 100% 60% / 0.2);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 6px 25px hsl(210 100% 60% / 0.35);
+    transform: translateY(-2px);
+  }
+
+  .btn-outline-glow {
+    @apply relative inline-flex items-center justify-center px-8 py-3 rounded-lg font-semibold transition-all duration-300;
+    border: 1px solid hsl(210 100% 60% / 0.4);
+    color: hsl(var(--primary));
+  }
+
+  .btn-outline-glow:hover {
+    background: hsl(210 100% 60% / 0.08);
+    box-shadow: 0 0 20px hsl(210 100% 60% / 0.12);
+    border-color: hsl(var(--primary));
+  }
+
+  .section-padding {
+    padding-inline: clamp(1rem, 4vw, 2.5rem);
+    padding-block: clamp(2.5rem, 6vw, 5rem);
+  }
+
+  .progress-glow {
+    box-shadow: 0 0 8px hsl(210 100% 60% / 0.35), 0 0 20px hsl(210 100% 60% / 0.12);
+  }
+
+  /* 🌊 Fluid typography utilities — scale smoothly across 320px → 1920px */
+  .fluid-h1 { font-size: clamp(2rem, 1.2rem + 4vw, 4.75rem); line-height: 1.05; }
+  .fluid-h2 { font-size: clamp(1.625rem, 1rem + 2.6vw, 3.25rem); line-height: 1.1; }
+  .fluid-h3 { font-size: clamp(1.25rem, 0.95rem + 1.4vw, 2rem); line-height: 1.2; }
+  .fluid-body { font-size: clamp(0.95rem, 0.85rem + 0.4vw, 1.125rem); line-height: 1.6; }
+  .fluid-small { font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.95rem); }
+
+  /* 🌊 Fluid container — capped on ultrawide, padded on mobile */
+  .container-fluid {
+    width: 100%;
+    max-width: min(1400px, 100% - 2rem);
+    margin-inline: auto;
+  }
+
+  /* 🧩 Auto-fit responsive grids — cards reflow without explicit breakpoints */
+  .grid-auto-fit {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+    gap: clamp(0.75rem, 1.5vw, 1.5rem);
+  }
+  .grid-auto-fit-sm {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+    gap: clamp(0.5rem, 1vw, 1rem);
+  }
+
+  /* 📲 Safe-area padding for notched devices (iPhone X+, Pixel cutouts) */
+  .safe-px {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+
+  /* 📐 Galaxy Fold (≤320px) — tighten padding so content never clips */
+  @media (max-width: 320px) {
+    .section-padding { padding-inline: 0.75rem; }
+  }
+
+  /* 📱 Landscape phones — shrink hero so content fits the short viewport */
+  @media (max-height: 480px) and (orientation: landscape) {
+    section[id="hero"] { min-height: auto; padding-block: 4rem; }
+  }
+}
+
+@layer utilities {
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient-shift 8s ease infinite;
+  }
+
+  @keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+}
