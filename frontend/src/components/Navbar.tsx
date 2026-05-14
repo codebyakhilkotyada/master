@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
 const navLinks = [
@@ -23,17 +23,20 @@ const Navbar = ({ onAdminOpen }: NavbarProps) => {
   const [typedChars, setTypedChars] = useState("");
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [password, setPassword] = useState("");
+
   const SECRET_WORD = "akhil";
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
 
     window.addEventListener("scroll", onScroll);
 
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Listen for keystrokes when hovering on logo
+  // Secret admin trigger
   useEffect(() => {
     if (!isHovering) {
       setTypedChars("");
@@ -53,10 +56,16 @@ const Navbar = ({ onAdminOpen }: NavbarProps) => {
 
     window.addEventListener("keydown", handleKeyDown);
 
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    return () =>
+      window.removeEventListener(
+        "keydown",
+        handleKeyDown
+      );
   }, [isHovering, typedChars]);
 
-  const handlePasswordSubmit = (e: React.FormEvent) => {
+  const handlePasswordSubmit = (
+    e: React.FormEvent
+  ) => {
     e.preventDefault();
 
     if (password === ADMIN_PASSWORD) {
@@ -69,17 +78,39 @@ const Navbar = ({ onAdminOpen }: NavbarProps) => {
     }
   };
 
+  // Prevent body scroll on mobile menu
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [mobileOpen]);
+
   return (
     <>
+      {/* Navbar */}
       <motion.nav
-        initial={{ y: -100 }}
+        initial={{ y: -80 }}
         animate={{ y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled ? "glass py-3" : "py-3 sm:py-4 md:py-5"
+        transition={{
+          duration: 0.5,
+        }}
+        className={`fixed top-0 left-0 right-0 z-[99999] transition-all duration-300 ${
+          scrolled
+            ? "glass py-3"
+            : "py-3 sm:py-4 md:py-5"
         }`}
+        style={{
+          pointerEvents: "auto",
+        }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+          {/* Logo */}
           <a
             href="#"
             onMouseEnter={() => setIsHovering(true)}
@@ -88,18 +119,18 @@ const Navbar = ({ onAdminOpen }: NavbarProps) => {
               setTypedChars("");
             }}
             onClick={(e) => e.preventDefault()}
-            className="text-lg sm:text-xl md:text-2xl font-bold text-gradient select-none cursor-pointer shrink-0"
+            className="text-xl sm:text-2xl font-bold text-gradient cursor-pointer select-none relative z-[99999]"
           >
             AK
           </a>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-4 lg:gap-8">
+          {/* Desktop Nav */}
+          <div className="hidden md:flex items-center gap-6 lg:gap-8">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors duration-300 whitespace-nowrap"
+                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors duration-300"
               >
                 {link.label}
               </a>
@@ -107,39 +138,42 @@ const Navbar = ({ onAdminOpen }: NavbarProps) => {
 
             <a
               href="#contact"
-              className="btn-primary text-sm px-5 lg:px-6 py-2 whitespace-nowrap"
+              className="btn-primary text-sm px-5 py-2"
             >
               Let's Talk
             </a>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Toggle */}
           <button
-            className="md:hidden text-foreground shrink-0"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
+            type="button"
+            onClick={() =>
+              setMobileOpen(!mobileOpen)
+            }
+            className="md:hidden relative z-[99999] text-foreground"
+            aria-label="Toggle mobile menu"
           >
-            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+            {mobileOpen ? (
+              <X size={28} />
+            ) : (
+              <Menu size={28} />
+            )}
           </button>
         </div>
 
-        {/* Mobile Navigation */}
-        <AnimatePresence>
-          {mobileOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -20, height: 0 }}
-              animate={{ opacity: 1, y: 0, height: "auto" }}
-              exit={{ opacity: 0, y: -20, height: 0 }}
-              transition={{ duration: 0.25 }}
-              className="md:hidden glass mt-2 mx-3 sm:mx-4 rounded-xl overflow-hidden"
-            >
-              <div className="flex flex-col p-4 sm:p-5 gap-4">
+        {/* Mobile Menu */}
+        {mobileOpen && (
+          <div className="md:hidden relative z-[99999] mt-3 px-3 sm:px-4">
+            <div className="glass rounded-2xl overflow-hidden shadow-2xl border border-border/40">
+              <div className="flex flex-col p-5 gap-5">
                 {navLinks.map((link) => (
                   <a
                     key={link.href}
                     href={link.href}
-                    onClick={() => setMobileOpen(false)}
-                    className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                    onClick={() =>
+                      setMobileOpen(false)
+                    }
+                    className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors duration-300"
                   >
                     {link.label}
                   </a>
@@ -147,62 +181,72 @@ const Navbar = ({ onAdminOpen }: NavbarProps) => {
 
                 <a
                   href="#contact"
-                  onClick={() => setMobileOpen(false)}
+                  onClick={() =>
+                    setMobileOpen(false)
+                  }
                   className="btn-primary text-sm text-center px-6 py-2"
                 >
                   Let's Talk
                 </a>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            </div>
+          </div>
+        )}
       </motion.nav>
 
       {/* Password Modal */}
-      <AnimatePresence>
-        {showPasswordModal && (
+      {showPasswordModal && (
+        <div
+          className="fixed inset-0 z-[999999] flex items-center justify-center bg-background/80 backdrop-blur-md p-4"
+          onClick={() => {
+            setShowPasswordModal(false);
+            setPassword("");
+          }}
+        >
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9999] flex items-center justify-center bg-background/80 backdrop-blur-md p-4"
-            onClick={() => {
-              setShowPasswordModal(false);
-              setPassword("");
+            initial={{
+              scale: 0.9,
+              opacity: 0,
             }}
+            animate={{
+              scale: 1,
+              opacity: 1,
+            }}
+            exit={{
+              scale: 0.9,
+              opacity: 0,
+            }}
+            className="glass rounded-2xl p-6 sm:p-8 w-full max-w-sm"
+            onClick={(e) =>
+              e.stopPropagation()
+            }
           >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="glass rounded-2xl p-6 sm:p-8 w-full max-w-sm"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <h3 className="text-lg font-bold text-foreground mb-4">
-                Admin Access
-              </h3>
+            <h3 className="text-lg font-bold text-foreground mb-4">
+              Admin Access
+            </h3>
 
-              <form onSubmit={handlePasswordSubmit}>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter admin password"
-                  autoFocus
-                  className="w-full px-4 py-3 rounded-lg bg-secondary border border-border text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all text-sm mb-4"
-                />
+            <form onSubmit={handlePasswordSubmit}>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) =>
+                  setPassword(e.target.value)
+                }
+                placeholder="Enter admin password"
+                autoFocus
+                className="w-full px-4 py-3 rounded-lg bg-secondary border border-border text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all text-sm mb-4"
+              />
 
-                <button
-                  type="submit"
-                  className="btn-primary w-full text-sm py-2.5"
-                >
-                  Unlock
-                </button>
-              </form>
-            </motion.div>
+              <button
+                type="submit"
+                className="btn-primary w-full text-sm py-2.5"
+              >
+                Unlock
+              </button>
+            </form>
           </motion.div>
-        )}
-      </AnimatePresence>
+        </div>
+      )}
     </>
   );
 };
