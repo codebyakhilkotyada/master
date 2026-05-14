@@ -8,20 +8,43 @@ interface ScrollRevealProps {
   direction?: "up" | "left" | "right" | "none";
 }
 
-const ScrollReveal = ({ children, className = "", delay = 0, direction = "up" }: ScrollRevealProps) => {
+const ScrollReveal = ({
+  children,
+  className = "",
+  delay = 0,
+  direction = "up",
+}: ScrollRevealProps) => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: false, margin: "-40px" });
+
+  const isInView = useInView(ref, {
+    once: true,
+    margin: "-40px",
+  });
 
   const getInitial = () => {
     switch (direction) {
       case "left":
-        return { opacity: 0, x: -50, clipPath: "inset(0 100% 0 0)" };
+        return {
+          opacity: 0,
+          x: -40,
+        };
+
       case "right":
-        return { opacity: 0, x: 50, clipPath: "inset(0 0 0 100%)" };
+        return {
+          opacity: 0,
+          x: 40,
+        };
+
       case "none":
-        return { opacity: 0, clipPath: "inset(0 100% 0 0)" };
+        return {
+          opacity: 0,
+        };
+
       default:
-        return { opacity: 0, y: 30, clipPath: "inset(0 100% 0 0)" };
+        return {
+          opacity: 0,
+          y: 24,
+        };
     }
   };
 
@@ -29,15 +52,18 @@ const ScrollReveal = ({ children, className = "", delay = 0, direction = "up" }:
     opacity: 1,
     y: 0,
     x: 0,
-    clipPath: "inset(0 0% 0 0)",
   });
 
   return (
     <motion.div
       ref={ref}
       initial={getInitial()}
-      animate={isInView ? getVisible() : getInitial()}
-      transition={{ duration: 0.8, delay, ease: [0.25, 0.46, 0.45, 0.94] }}
+      animate={isInView ? getVisible() : {}}
+      transition={{
+        duration: 0.7,
+        delay,
+        ease: [0.25, 0.46, 0.45, 0.94],
+      }}
       className={className}
     >
       {children}
