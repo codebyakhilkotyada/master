@@ -33,15 +33,7 @@ const defaultProjects = [
     github_url: "#",
     images: [saas1, saas2, saas3],
   },
-  {
-    title: "Portfolio Website",
-    description:
-      "A premium portfolio for a creative professional with smooth scroll animations, dynamic content, and mobile-first design.",
-    tags: ["React", "Framer Motion", "Tailwind CSS"],
-    live_url: "#",
-    github_url: "#",
-    images: [portfolio1, portfolio2, portfolio3],
-  },
+ 
 ];
 
 const ProjectsSection = () => {
