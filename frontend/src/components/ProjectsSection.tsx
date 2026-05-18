@@ -15,24 +15,7 @@ import portfolio2 from "@/assets/projects/portfolio-2.jpg";
 import portfolio3 from "@/assets/projects/portfolio-3.jpg";
 
 const defaultProjects = [
-  {
-    title: "E-Commerce Platform",
-    description:
-      "A modern, fully responsive e-commerce website with seamless checkout flow and optimized performance for maximum conversions.",
-    tags: ["React", "Tailwind CSS", "Stripe", "Node.js"],
-    live_url: "#",
-    github_url: "#",
-    images: [ecommerce1, ecommerce2, ecommerce3],
-  },
-  {
-    title: "SaaS Landing Page",
-    description:
-      "High-converting landing page for a SaaS startup featuring animated sections, testimonials, and integrated lead capture forms.",
-    tags: ["HTML", "CSS", "JavaScript", "GSAP"],
-    live_url: "#",
-    github_url: "#",
-    images: [saas1, saas2, saas3],
-  },
+
  
 ];
 
